@@ -56,7 +56,7 @@ def parse():
         lower_b = list[0]
         upper_b = list[1]
 
-        #print(aisle_book)
+        #print(orders_list)
 
         return orders_list, aisle_book, int(lower_b), int(upper_b)
 
@@ -84,8 +84,8 @@ def generate_wave(orders_list, lower_b, upper_b):
     qnty_orders_on_wave = random.randint(1,size_of_orders_list)
     wave = random.sample(range(0, size_of_orders_list), qnty_orders_on_wave)
     check, items = validate_wave(wave,orders_list,lower_b,upper_b)
-    print(wave)
-    print(items)
+    #print(wave)
+    #print(items)
     if(check):
         return wave, items
     else:
@@ -118,14 +118,12 @@ def find_aisles_and_items(order,aisle_book):
     items_to_pick = order.copy()
     retrieval_plan = defaultdict(int)
 
-    # Score corridors based on how many needed items they contain
     corridor_scores = defaultdict(int)
     for item, corridors in aisle_book.items():
         if item in items_to_pick:
             for corridor, available in corridors.items():
                 corridor_scores[corridor] += min(items_to_pick[item], available)
 
-    # Sort corridors by their score (most useful first)
     sorted_corridors = sorted(corridor_scores.items(), key=lambda x: x[1], reverse=True)
 
     for corridor, _ in sorted_corridors:
@@ -136,7 +134,6 @@ def find_aisles_and_items(order,aisle_book):
                 corridors_visited.add(corridor)
                 items_to_pick[item] -= take
 
-    # If there are still remaining items, the order cannot be fully completed
     if any(amount > 0 for amount in items_to_pick.values()):
         return 1000
 
@@ -175,6 +172,7 @@ def aisles_for_order_cost(item : int, qnty : int, aisle_book : dict):
         else:
             qnty = qnty - availabe[x]
             x +=1
+
             
 if __name__ == '__main__':
     o_list, a_book, lb, ub = parse()
@@ -204,7 +202,7 @@ if __name__ == '__main__':
 
     ax.set_xlim(0,60)
 
-    plt.show()
+    #plt.show()
 
     
 
