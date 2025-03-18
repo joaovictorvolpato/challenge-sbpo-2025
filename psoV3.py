@@ -13,7 +13,7 @@ NUM_ORDERS = len(orders)
 MAX_CAPACITY = ub  
 MIN_CAPACITY = lb  
 
-num_particles = 2000
+num_particles = 200
 num_iterations = 40
 mutation_rate = 0.6
 

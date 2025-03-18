@@ -13,7 +13,7 @@ path = "/home/joaovolp/challenge-sbpo-2025/datasets/a"
 
 
 def parse():
-    with open(f"{path}/instance_0001.txt","r") as file:
+    with open(f"{path}/instance_0005.txt","r") as file:
         lines = file.readlines()
         lines = [line.strip() for line in lines if line.strip()]
         first_line = lines[0].split()
