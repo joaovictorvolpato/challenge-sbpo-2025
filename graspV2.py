@@ -43,12 +43,10 @@ def grasp_aisle_based_batch(warehouse, orders, min_items, max_items, iterations=
         if improved_solution is not None:
             batch_orders, batch_items, aisle_assignment, aisles_visited, efficiency = improved_solution
 
-        # Step 4: Update best solution
         if efficiency > best_efficiency:
             best_efficiency = efficiency
             best_solution = (batch_orders, batch_items, aisle_assignment, aisles_visited, efficiency)
 
-        #print(f"Iteration {it+1}/{iterations}, Best Efficiency: {best_efficiency:.4f}")
 
     return best_solution
 
@@ -129,12 +127,10 @@ def local_search_aisles(selected_aisles, warehouse, orders, min_items, max_items
         improved = False
         neighbors = []
 
-        # Try adding one new aisle not in current selection
         for aisle in all_aisles - selected_aisles:
             new_aisles = selected_aisles | {aisle}
             neighbors.append(new_aisles)
 
-        # Try removing one aisle (if we have more than 1)
         if len(selected_aisles) > 1:
             for aisle in selected_aisles:
                 new_aisles = selected_aisles - {aisle}
@@ -148,11 +144,11 @@ def local_search_aisles(selected_aisles, warehouse, orders, min_items, max_items
 
             batch_orders, batch_items, aisle_assignment, aisles_visited, efficiency = result
 
-            if efficiency > best_solution[4]:  # Compare efficiencies
+            if efficiency > best_solution[4]:  
                 best_solution = (batch_orders, batch_items, aisle_assignment, aisles_visited, efficiency)
                 selected_aisles = neighbor_aisles
                 improved = True
-                break  # Restart search from this better solution
+                break 
 
     return best_solution if best_solution[4] > current_efficiency else None
 
