@@ -164,6 +164,7 @@ def pso():
         if fitness > global_best_fitness:
             global_best_fitness = fitness
             global_best_position = (order_selection, aisle_assignment)
+            #salvar na classe solution
 
     for iteration in range(num_iterations):
         print(f"Iteration {iteration + 1}/{num_iterations}")
@@ -192,6 +193,7 @@ def pso():
             if fitness > global_best_fitness:
                 global_best_fitness = fitness
                 global_best_position = (new_order_selection, new_aisle_assignment)
+                #salvar a solução na classe solution
 
             particle['order_selection'] = new_order_selection
             particle['aisle_assignment'] = new_aisle_assignment

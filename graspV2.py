@@ -5,7 +5,16 @@ import explorer
 import copy
 import json
 
-def grasp_aisle_based_batch(warehouse, orders, min_items, max_items, iterations=100, max_aisles_to_visit=5, top_k_aisles=10):
+
+class Solution:
+    def __init__(self,batch_order,batch_items,aisle_assig,aisle_visited, eficency):
+        self.batch_order = batch_order
+        self.batch_items = batch_items
+        self.aisle_assign = aisle_assig
+        self.aisle_visited = aisle_visited
+        self.eficency = eficency
+
+def grasp_aisle_based_batch(warehouse, orders, min_items, max_items, iterations=100, max_aisles_to_visit=10, top_k_aisles=10):
     best_solution = None
     best_efficiency = 0
 
@@ -46,6 +55,7 @@ def grasp_aisle_based_batch(warehouse, orders, min_items, max_items, iterations=
         if efficiency > best_efficiency:
             best_efficiency = efficiency
             best_solution = (batch_orders, batch_items, aisle_assignment, aisles_visited, efficiency)
+            #salvar melhor solução na classe data
 
 
     return best_solution

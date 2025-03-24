@@ -53,6 +53,7 @@ model += total_items_picked <= max_items
 
 # Solve the model with CBC solver
 solver = pulp.PULP_CBC_CMD(msg=True)
+solver.timeLimit = 60
 model.solve(solver)
 
 selected_orders = []
