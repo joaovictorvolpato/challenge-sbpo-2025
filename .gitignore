@@ -2,3 +2,9 @@
 .DS_Store
 /target/
 outputs/*.txt
+
+# pycache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
