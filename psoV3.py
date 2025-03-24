@@ -4,15 +4,9 @@ import explorer
 from collections import defaultdict
 
 # Data
-orders, warehouse, lb, ub = explorer.parse()
+#orders, warehouse, lb, ub = explorer.parse()
 
-items = np.array(list(warehouse.keys()))
-NUM_ITEMS = len(items)
-NUM_ORDERS = len(orders)
-
-MAX_CAPACITY = ub  
-MIN_CAPACITY = lb  
-
+# GLOBAL VARIABLES (Bro, please don't use global variables again)
 num_particles = 200
 num_iterations = 40
 mutation_rate = 0.6
@@ -27,7 +21,7 @@ def get_particle_hash(order_selection, aisle_assignment):
     return hash((orders_hash, aisles_hash))
 
 
-def calculate_fitness(order_selection, aisle_assignment):
+def calculate_fitness(orders, warehouse, order_selection, aisle_assignment):
     total_items = 0
     visited_aisles = set()
 
@@ -57,19 +51,19 @@ def calculate_fitness(order_selection, aisle_assignment):
     return efficiency
 
 
-def calculate_fitness_with_cache(order_selection, aisle_assignment):
+def calculate_fitness_with_cache(orders, warehouse, order_selection, aisle_assignment):
     state_hash = get_particle_hash(order_selection, aisle_assignment)
 
     if state_hash in fitness_cache:
         return fitness_cache[state_hash]
 
-    fitness = calculate_fitness(order_selection, aisle_assignment)
+    fitness = calculate_fitness(orders, warehouse, order_selection, aisle_assignment)
     fitness_cache[state_hash] = fitness
 
     return fitness
 
 
-def initialize_particle():
+def initialize_particle(orders, warehouse, NUM_ORDERS, MIN_CAPACITY, MAX_CAPACITY):
     valid = False
     while not valid:
         # Generate a binary mask and use it to select order indices
@@ -94,7 +88,7 @@ def initialize_particle():
     return order_selection, aisle_assignment
 
 
-def mutate_aisle_assignment(aisle_assignment, mutation_rate=0.1):
+def mutate_aisle_assignment(warehouse, aisle_assignment, mutation_rate=0.1):
     new_assignment = aisle_assignment.copy()
     already_selected_aisles = set(new_assignment.values())
 
@@ -113,7 +107,7 @@ def mutate_aisle_assignment(aisle_assignment, mutation_rate=0.1):
     return new_assignment
 
 
-def mutate_order_selection(order_selection, mutation_rate=0.1):
+def mutate_order_selection(orders, NUM_ORDERS, MIN_CAPACITY, MAX_CAPACITY, order_selection, mutation_rate=0.1):
     current_selection = order_selection.copy()
     new_selection = current_selection.tolist()
 
@@ -136,13 +130,19 @@ def mutate_order_selection(order_selection, mutation_rate=0.1):
     return new_selection
 
 
-def pso():
+def pso(orders, warehouse, lb, ub):
     swarm = []
     global_best_position = None
     global_best_fitness = float('-inf')
+    items = np.array(list(warehouse.keys()))
+    NUM_ITEMS = len(items)
+    NUM_ORDERS = len(orders)
+
+    MAX_CAPACITY = ub
+    MIN_CAPACITY = lb
 
     for _ in range(num_particles):
-        order_selection, aisle_assignment = initialize_particle()
+        order_selection, aisle_assignment = initialize_particle(orders, warehouse, NUM_ORDERS, MIN_CAPACITY, MAX_CAPACITY)
 
         particle_hash = get_particle_hash(order_selection, aisle_assignment)
 
@@ -150,7 +150,7 @@ def pso():
             continue
 
         tabu_list.add(particle_hash)
-        fitness = calculate_fitness_with_cache(order_selection, aisle_assignment)
+        fitness = calculate_fitness_with_cache(orders, warehouse, order_selection, aisle_assignment)
 
         swarm.append({
             'order_selection': order_selection,
@@ -166,14 +166,14 @@ def pso():
             global_best_position = (order_selection, aisle_assignment)
 
     for iteration in range(num_iterations):
-        print(f"Iteration {iteration + 1}/{num_iterations}")
+        #print(f"Iteration {iteration + 1}/{num_iterations}")
 
         for particle in swarm:
             order_selection = particle['order_selection']
             aisle_assignment = particle['aisle_assignment']
 
-            new_order_selection = mutate_order_selection(order_selection, mutation_rate)
-            new_aisle_assignment = mutate_aisle_assignment(aisle_assignment, mutation_rate)
+            new_order_selection = mutate_order_selection(orders, NUM_ORDERS, MIN_CAPACITY, MAX_CAPACITY, order_selection, mutation_rate)
+            new_aisle_assignment = mutate_aisle_assignment(warehouse, aisle_assignment, mutation_rate)
 
             particle_hash = get_particle_hash(new_order_selection, new_aisle_assignment)
 
@@ -182,7 +182,7 @@ def pso():
 
             tabu_list.add(particle_hash)
 
-            fitness = calculate_fitness_with_cache(new_order_selection, new_aisle_assignment)
+            fitness = calculate_fitness_with_cache(orders, warehouse, new_order_selection, new_aisle_assignment)
 
             if fitness > particle['best_fitness']:
                 particle['best_fitness'] = fitness
@@ -197,12 +197,12 @@ def pso():
             particle['aisle_assignment'] = new_aisle_assignment
             particle['fitness'] = fitness
 
-        print(f"Best fitness so far: {global_best_fitness}")
+        #print(f"Best fitness so far: {global_best_fitness}")
 
     return global_best_position, global_best_fitness
 
 
-def write_solution_to_file(best_solution, filename="best_solution.txt"):
+def write_solution_to_file(orders, best_solution, filename="best_solution.txt"):
     visited_aisles = set()
     order_selection = best_solution[0]
     aisle_assignment = best_solution[1]
@@ -225,7 +225,18 @@ def write_solution_to_file(best_solution, filename="best_solution.txt"):
         for aisle in visited_aisles:
             file.write(f"{aisle}\n")
 
+def run_pso_algorithm(instance_path: str):    
+    orders, warehouse, lb, ub = explorer.parse(instance_path)
+    best_solution, best_fitness = pso(orders, warehouse, lb, ub)
+    solution_dict = {
+        "best_solution": best_solution,
+        "best_fitness": best_fitness
+    }
 
-best_solution, best_fitness = pso()
+    return solution_dict
 
-write_solution_to_file(best_solution)
+#write_solution_to_file(best_solution)
+
+if __name__ == "__main__":
+    solution = run_pso_algorithm("datasets/a/instance_0020.txt")
+    print(solution)

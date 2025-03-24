@@ -9,11 +9,8 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 from itertools import combinations
 
-path = "/home/joaovolp/challenge-sbpo-2025/datasets/a"
-
-
-def parse():
-    with open(f"{path}/instance_0005.txt","r") as file:
+def parse(instance_path: str):
+    with open(instance_path,"r") as file:
         lines = file.readlines()
         lines = [line.strip() for line in lines if line.strip()]
         first_line = lines[0].split()

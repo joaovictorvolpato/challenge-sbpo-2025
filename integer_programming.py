@@ -58,13 +58,13 @@ def run_algorithm(orders, warehouse, lb, ub) -> tuple[List, List]:
     selected_orders = []
     for o in O:
         if x[o].varValue > 0.5:
-            print(f"Order {o}: {orders[o]}")
+            #print(f"Order {o}: {orders[o]}")
             selected_orders.append(o)
 
     visited_aisles = []
     for a in A:
         if y[a].varValue > 0.5:
-            print(f"Aisle: {a}")
+            #print(f"Aisle: {a}")
             visited_aisles.append(a)
     
     return selected_orders, visited_aisles
@@ -95,8 +95,22 @@ def write_solution_to_file(selected_orders, visited_aisles, filename="best_solut
 
 # write_solution_to_file(selected_orders, visited_aisles)
 
-def run_ip_algorithm(instance_path: str):
+def run_ip_algorithm(instance_path: str) -> dict:
     orders, warehouse, lb, ub = explorer.parse(instance_path)
-    selected_orders, visited_aisles = run_algorithm(warehouse, orders, lb, ub)
+    #print("orders", orders)
+    #print("warehouse", warehouse)
+    #print("lb", lb)
+    #print("ub", ub)
+    selected_orders, visited_aisles = run_algorithm(orders, warehouse, lb, ub)
+    
+    solution_dict = {
+        "selected_orders": selected_orders,
+        "visited_aisles": visited_aisles
+    }
 
-    return selected_orders, visited_aisles
+    return solution_dict
+
+
+if __name__ == "__main__":
+    solution = run_ip_algorithm("datasets/a/instance_0020.txt")
+    print(solution)

@@ -162,15 +162,29 @@ def write_solution_to_file(batch_orders, aisle_assignment, aisles_visited, filen
         for aisle in sorted(aisles_visited):
             file.write(f"{aisle}\n")
 
-if __name__ == "__main__":
-    orders, warehouse, min_items, max_items = explorer.parse()
-    solution = grasp_aisle_based_batch(warehouse, orders, min_items, max_items, iterations=50)
+def run_grasp_algorithm(instance_path: str):
+    orders, warehouse, min_items, max_items = explorer.parse(instance_path)
+    solution = grasp_aisle_based_batch(warehouse, orders, min_items, max_items, iterations=5)
 
     if solution:
         batch_orders, batch_items, aisle_assignment, aisles_visited, efficiency = solution
-        print("Best efficiency:", efficiency)
-        print("Orders selected:", batch_orders)
-        print("Aisles visited:", aisles_visited)
-        write_solution_to_file(batch_orders, aisle_assignment, aisles_visited)
-    else:
-        print("No valid batch found.")
+        #print("Best efficiency:", efficiency)
+        #print("Orders selected:", batch_orders)
+        #print("Aisles visited:", aisles_visited)
+        # write_solution_to_file(batch_orders, aisle_assignment, aisles_visited)
+        solution_formatted = {
+            "best_efficiency": efficiency,
+            "batch_items": batch_items,
+            "batch_orders": batch_orders,
+            "aisle_assignment": aisle_assignment,
+            "aisles_visited": aisles_visited
+        }
+
+        return solution_formatted
+
+    return "No valid batch found."
+
+
+if __name__ == "__main__":
+    solution = run_grasp_algorithm("datasets/a/instance_0020.txt")
+    print(solution)
