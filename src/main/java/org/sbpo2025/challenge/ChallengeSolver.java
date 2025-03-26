@@ -25,11 +25,11 @@ public class ChallengeSolver {
         this.waveSizeLB = waveSizeLB;
         this.waveSizeUB = waveSizeUB;
     }
-
+    
     public ChallengeSolution solve(StopWatch stopWatch) {
-        // Implement your solution here
-        return null;
+        return new PsoSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve(stopWatch);
     }
+    
 
     /*
      * Get the remaining time in seconds
