@@ -75,7 +75,49 @@ public class PsoSolver {
             }
         }
 
-        return new ChallengeSolution(bestOrderSelection, bestAislesVisited);
+        if (bestOrderSelection != null && !bestOrderSelection.isEmpty()
+            && bestAislesVisited != null && !bestAislesVisited.isEmpty()) {
+            return new ChallengeSolution(bestOrderSelection, bestAislesVisited);
+        }
+
+        System.out.println("🔁 Primeira tentativa falhou. Reajustando parâmetros e tentando novamente...");
+        return retryWithRelaxedParameters();
+    }
+
+    private ChallengeSolution retryWithRelaxedParameters() {
+        int boostedParticles = 400;
+        int boostedIterations = 100;
+    
+        for (int i = 0; i < boostedParticles; i++) {
+            Particle p = initializeParticle();
+            if (p == null) continue;
+
+            if (isSolutionFeasible(p.orderSelection, p.aislesVisited)) {
+                return new ChallengeSolution(p.orderSelection, p.aislesVisited);
+            }
+    
+            for (int iter = 0; iter < boostedIterations; iter++) {
+                Set<Integer> mutatedOrders = mutateOrderSelection(p.orderSelection);
+                Set<Integer> aislesVisited = assignAisles(mutatedOrders);
+                if (aislesVisited == null) continue;
+                if (isSolutionFeasible(mutatedOrders, aislesVisited)) {
+                    return new ChallengeSolution(mutatedOrders, aislesVisited);
+                }
+            }
+        }
+    
+        // Última tentativa forçando 1 pedido
+        System.out.println("⚠️ Tentando fallback mínimo com 1 pedido...");
+        for (int idx = 0; idx < orders.size(); idx++) {
+            Set<Integer> singleton = Set.of(idx);
+            Set<Integer> aislesVisited = assignAisles(singleton);
+            if (aislesVisited != null && isSolutionFeasible(singleton, aislesVisited)) {
+                return new ChallengeSolution(singleton, aislesVisited);
+            }
+        }
+    
+        System.err.println("❌ Nenhuma solução viável encontrada mesmo após relaxar.");
+        return null;
     }
 
     private Particle initializeParticle() {
