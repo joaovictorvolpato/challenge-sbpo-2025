@@ -81,3 +81,53 @@ Processado: ./datasets/a/instance_0017.txt -> ./outputs/checker_input/pso_partia
 Is solution feasible: True
 Objective function value: 5.0
 Processado: ./datasets/a/instance_0020.txt -> ./outputs/checker_input/pso_partial_solution_20.txt
+
+
+=========
+IP
+
+bonomo@your-new-hostname:~/Github/challenge-sbpo-2025$ ./run_checker.sh 
+Is solution feasible: True
+Objective function value: 13.2
+Processado: ./datasets/a/instance_0001.txt -> ./outputs/ip_results_converted/final_algorithm_3_instance_01.txt
+
+Is solution feasible: True
+Objective function value: 12.0
+Processado: ./datasets/a/instance_0003.txt -> ./outputs/ip_results_converted/final_algorithm_3_instance_03.txt
+
+Is solution feasible: True
+Objective function value: 3.5
+Processado: ./datasets/a/instance_0004.txt -> ./outputs/ip_results_converted/final_algorithm_3_instance_04.txt
+
+Is solution feasible: True
+Objective function value: 4.416666666666667
+Processado: ./datasets/a/instance_0009.txt -> ./outputs/ip_results_converted/final_algorithm_3_instance_09.txt
+
+
+Is solution feasible: True
+Objective function value: 13.633333333333333
+Processado: ./datasets/a/instance_0011.txt -> ./outputs/ip_results_converted/final_algorithm_3_instance_11.txt
+
+Is solution feasible: True
+Objective function value: 11.25
+Processado: ./datasets/a/instance_0012.txt -> ./outputs/ip_results_converted/final_algorithm_3_instance_12.txt
+
+Is solution feasible: True
+Objective function value: 40.35294117647059
+Processado: ./datasets/a/instance_0016.txt -> ./outputs/ip_results_converted/final_algorithm_3_instance_16.txt
+
+Is solution feasible: True
+Objective function value: 24.142857142857142
+Processado: ./datasets/a/instance_0017.txt -> ./outputs/ip_results_converted/final_algorithm_3_instance_17.txt
+
+Is solution feasible: True
+Objective function value: 86.07142857142857
+Processado: ./datasets/a/instance_0018.txt -> ./outputs/ip_results_converted/final_algorithm_3_instance_18.txt
+
+Is solution feasible: True
+Objective function value: 111.0
+Processado: ./datasets/a/instance_0019.txt -> ./outputs/ip_results_converted/final_algorithm_3_instance_19.txt
+
+Is solution feasible: True
+Objective function value: 5.0
+Processado: ./datasets/a/instance_0020.txt -> ./outputs/ip_results_converted/final_algorithm_3_instance_20.txt
