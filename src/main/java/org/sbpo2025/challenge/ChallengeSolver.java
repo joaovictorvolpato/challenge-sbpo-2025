@@ -28,8 +28,8 @@ public class ChallengeSolver {
 
     public ChallengeSolution solve(StopWatch stopWatch) {
         //return new PsoSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve(stopWatch);
-        return new GraspSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve();
-        //return new IntegerProgrammingSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve();    
+        //return new GraspSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve();
+        return new IntegerProgrammingSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve();    
     }
     
     /*

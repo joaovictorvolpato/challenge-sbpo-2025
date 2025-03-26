@@ -24,28 +24,26 @@ public class IntegerProgrammingSolver {
     public ChallengeSolution solve() {
         try {
             IloCplex cplex = new IloCplex();
+            cplex.setParam(IloCplex.Param.TimeLimit, 550);
 
             int O = orders.size();
             int A = aisles.size();
 
-            // Conjuntos úteis
             Set<Integer> itemSet = new HashSet<>();
             for (Map<Integer, Integer> order : orders) {
                 itemSet.addAll(order.keySet());
             }
 
-            // Variáveis
-            IloNumVar[] x = cplex.boolVarArray(O); // Seleção de pedidos
-            IloNumVar[] y = cplex.boolVarArray(A); // Corredores visitados
+            IloNumVar[] x = cplex.boolVarArray(O); 
+            IloNumVar[] y = cplex.boolVarArray(A); 
 
-            Map<String, IloNumVar> z = new HashMap<>(); // item i pego do corredor a
+            Map<String, IloNumVar> z = new HashMap<>(); 
             for (int i : itemSet) {
                 for (int a = 0; a < A; a++) {
                     z.put(i + "_" + a, cplex.boolVar("z_" + i + "_" + a));
                 }
             }
 
-            // Função objetivo: Maximize total de itens coletados - M * corredores visitados
             int M = 10;
             IloLinearNumExpr totalItems = cplex.linearNumExpr();
             for (int o = 0; o < O; o++) {
@@ -61,7 +59,6 @@ public class IntegerProgrammingSolver {
 
             cplex.addMaximize(cplex.diff(totalItems, totalAisles));
 
-            // Restrição 1: Demanda ≤ Estoque
             for (int i : itemSet) {
                 IloLinearNumExpr demand = cplex.linearNumExpr();
                 for (int o = 0; o < O; o++) {
@@ -74,21 +71,19 @@ public class IntegerProgrammingSolver {
                     if (available > 0) {
                         supply.addTerm(available, z.get(i + "_" + a));
                     } else {
-                        cplex.addEq(z.get(i + "_" + a), 0); // otimização
+                        cplex.addEq(z.get(i + "_" + a), 0); 
                     }
                 }
 
                 cplex.addLe(demand, supply);
             }
 
-            // Restrição 2: Só pega item se corredor foi visitado
             for (int i : itemSet) {
                 for (int a = 0; a < A; a++) {
                     cplex.addLe(z.get(i + "_" + a), y[a]);
                 }
             }
 
-            // Restrição 3: Limites de quantidade total
             IloLinearNumExpr total = cplex.linearNumExpr();
             for (int o = 0; o < O; o++) {
                 for (Map.Entry<Integer, Integer> e : orders.get(o).entrySet()) {
@@ -99,10 +94,6 @@ public class IntegerProgrammingSolver {
             cplex.addGe(total, waveSizeLB);
             cplex.addLe(total, waveSizeUB);
 
-            // Parâmetros (importante para o desafio)
-            cplex.setParam(IloCplex.Param.TimeLimit, 60); // 60s ou mude se quiser
-
-            // Solve!
             if (cplex.solve()) {
                 Set<Integer> selectedOrders = new HashSet<>();
                 Set<Integer> visitedAisles = new HashSet<>();
