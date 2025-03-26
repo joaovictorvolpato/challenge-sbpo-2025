@@ -25,9 +25,10 @@ public class ChallengeSolver {
         this.waveSizeLB = waveSizeLB;
         this.waveSizeUB = waveSizeUB;
     }
-    
+
     public ChallengeSolution solve(StopWatch stopWatch) {
-        return new PsoSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve(stopWatch);
+        //return new PsoSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve(stopWatch);
+        return new GraspSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve();
     }
     
 
