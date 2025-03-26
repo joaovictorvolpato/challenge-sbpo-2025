@@ -130,7 +130,7 @@ def mutate_order_selection(orders, NUM_ORDERS, MIN_CAPACITY, MAX_CAPACITY, order
     return new_selection
 
 
-def pso(orders, warehouse, lb, ub):
+def pso(orders, warehouse, lb, ub, instance_path):
     swarm = []
     global_best_position = None
     global_best_fitness = float('-inf')
@@ -164,6 +164,7 @@ def pso(orders, warehouse, lb, ub):
         if fitness > global_best_fitness:
             global_best_fitness = fitness
             global_best_position = (order_selection, aisle_assignment)
+            write_solution_to_file(orders, global_best_position, instance_name=instance_path[-6:-4])
 
     for iteration in range(num_iterations):
         #print(f"Iteration {iteration + 1}/{num_iterations}")
@@ -192,6 +193,7 @@ def pso(orders, warehouse, lb, ub):
             if fitness > global_best_fitness:
                 global_best_fitness = fitness
                 global_best_position = (new_order_selection, new_aisle_assignment)
+                write_solution_to_file(orders, global_best_position, instance_name=instance_path[-6:-4])
 
             particle['order_selection'] = new_order_selection
             particle['aisle_assignment'] = new_aisle_assignment
@@ -202,7 +204,8 @@ def pso(orders, warehouse, lb, ub):
     return global_best_position, global_best_fitness
 
 
-def write_solution_to_file(orders, best_solution, filename="best_solution.txt"):
+def write_solution_to_file(orders, best_solution, instance_name=""):
+    filename = f"outputs/pso_partial_solution_{instance_name}.txt" 
     visited_aisles = set()
     order_selection = best_solution[0]
     aisle_assignment = best_solution[1]
@@ -227,7 +230,7 @@ def write_solution_to_file(orders, best_solution, filename="best_solution.txt"):
 
 def run_pso_algorithm(instance_path: str):    
     orders, warehouse, lb, ub = explorer.parse(instance_path)
-    best_solution, best_fitness = pso(orders, warehouse, lb, ub)
+    best_solution, best_fitness = pso(orders, warehouse, lb, ub, instance_path)
     solution_dict = {
         "best_solution": best_solution,
         "best_fitness": best_fitness

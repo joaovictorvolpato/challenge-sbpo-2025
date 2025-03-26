@@ -53,6 +53,7 @@ def run_algorithm(orders, warehouse, lb, ub) -> tuple[List, List]:
 
     # Solve the model with CBC solver
     solver = pulp.PULP_CBC_CMD(msg=True)
+    solver.timeLimit = 540
     model.solve(solver)
 
     selected_orders = []

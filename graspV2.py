@@ -5,7 +5,7 @@ import explorer
 import copy
 import json
 
-def grasp_aisle_based_batch(warehouse, orders, min_items, max_items, iterations=100, max_aisles_to_visit=5, top_k_aisles=10):
+def grasp_aisle_based_batch(warehouse, orders, min_items, max_items, iterations=100, max_aisles_to_visit=10, top_k_aisles=10, instance_name=""):
     best_solution = None
     best_efficiency = 0
 
@@ -46,6 +46,7 @@ def grasp_aisle_based_batch(warehouse, orders, min_items, max_items, iterations=
         if efficiency > best_efficiency:
             best_efficiency = efficiency
             best_solution = (batch_orders, batch_items, aisle_assignment, aisles_visited, efficiency)
+            write_solution_to_file(batch_orders, aisle_assignment, aisles_visited, instance_name)
 
 
     return best_solution
@@ -152,7 +153,8 @@ def local_search_aisles(selected_aisles, warehouse, orders, min_items, max_items
 
     return best_solution if best_solution[4] > current_efficiency else None
 
-def write_solution_to_file(batch_orders, aisle_assignment, aisles_visited, filename="best_solution.txt"):
+def write_solution_to_file(batch_orders, aisle_assignment, aisles_visited, instance_name=""):
+    filename = f"outputs/grasp_partial_solution_{instance_name}.txt"    
     with open(filename, "w") as file:
         file.write(f"{len(batch_orders)}\n")
         for order_idx in sorted(batch_orders):
@@ -164,7 +166,7 @@ def write_solution_to_file(batch_orders, aisle_assignment, aisles_visited, filen
 
 def run_grasp_algorithm(instance_path: str):
     orders, warehouse, min_items, max_items = explorer.parse(instance_path)
-    solution = grasp_aisle_based_batch(warehouse, orders, min_items, max_items, iterations=5)
+    solution = grasp_aisle_based_batch(warehouse, orders, min_items, max_items, instance_name=instance_path[-6:-4])
 
     if solution:
         batch_orders, batch_items, aisle_assignment, aisles_visited, efficiency = solution
