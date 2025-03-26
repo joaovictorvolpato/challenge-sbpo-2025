@@ -60,6 +60,7 @@ public class GraspSolver {
             }
         }
 
+        System.err.println(bestSolution);
         return bestSolution;
     }
 
