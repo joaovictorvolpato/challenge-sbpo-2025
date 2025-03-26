@@ -1,0 +1,83 @@
+========
+GRASP:
+
+Is solution feasible: True
+Objective function value: 11.75
+Processado: ./datasets/a/instance_0001.txt -> ./outputs/checker_input/grasp_partial_solution_01.txt
+
+Is solution feasible: True
+Objective function value: 1.0
+Processado: ./datasets/a/instance_0002.txt -> ./outputs/checker_input/grasp_partial_solution_02.txt
+
+Is solution feasible: True
+Objective function value: 8.11111111111111
+Processado: ./datasets/a/instance_0003.txt -> ./outputs/checker_input/grasp_partial_solution_03.txt
+
+Is solution feasible: True
+Objective function value: 123.28571428571429
+Processado: ./datasets/a/instance_0005.txt -> ./outputs/checker_input/grasp_partial_solution_05.txt
+
+Is solution feasible: True
+Objective function value: 87.75
+Processado: ./datasets/a/instance_0006.txt -> ./outputs/checker_input/grasp_partial_solution_06.txt
+
+Is solution feasible: True
+Objective function value: 113.0
+Processado: ./datasets/a/instance_0007.txt -> ./outputs/checker_input/grasp_partial_solution_07.txt
+
+Is solution feasible: True
+Objective function value: 11.627118644067796
+Processado: ./datasets/a/instance_0016.txt -> ./outputs/checker_input/grasp_partial_solution_16.txt
+
+Is solution feasible: True
+Objective function value: 4.219512195121951
+Processado: ./datasets/a/instance_0017.txt -> ./outputs/checker_input/grasp_partial_solution_17.txt
+
+Is solution feasible: True
+Objective function value: 17.214285714285715
+Processado: ./datasets/a/instance_0018.txt -> ./outputs/checker_input/grasp_partial_solution_18.txt
+
+Is solution feasible: True
+Objective function value: 10.193877551020408
+Processado: ./datasets/a/instance_0019.txt -> ./outputs/checker_input/grasp_partial_solution_19.txt
+
+=======
+PSO:
+
+Is solution feasible: True
+Objective function value: 4.1875
+Processado: ./datasets/a/instance_0001.txt -> ./outputs/checker_input/pso_partial_solution_01.txt
+
+Is solution feasible: True
+Objective function value: 2.0
+Processado: ./datasets/a/instance_0002.txt -> ./outputs/checker_input/pso_partial_solution_02.txt
+
+Is solution feasible: True
+Objective function value: 3.4482758620689653
+Processado: ./datasets/a/instance_0003.txt -> ./outputs/checker_input/pso_partial_solution_03.txt
+
+Is solution feasible: True
+Objective function value: 2.1666666666666665
+Processado: ./datasets/a/instance_0004.txt -> ./outputs/checker_input/pso_partial_solution_04.txt
+
+Is solution feasible: True
+Objective function value: 1.5194805194805194
+Processado: ./datasets/a/instance_0009.txt -> ./outputs/checker_input/pso_partial_solution_09.txt
+
+Is solution feasible: False
+Processado: ./datasets/a/instance_0011.txt -> ./outputs/checker_input/pso_partial_solution_11.txt
+
+Is solution feasible: False
+Processado: ./datasets/a/instance_0012.txt -> ./outputs/checker_input/pso_partial_solution_12.txt
+
+Is solution feasible: True
+Objective function value: 7.051282051282051
+Processado: ./datasets/a/instance_0016.txt -> ./outputs/checker_input/pso_partial_solution_16.txt
+
+Is solution feasible: True
+Objective function value: 4.2439024390243905
+Processado: ./datasets/a/instance_0017.txt -> ./outputs/checker_input/pso_partial_solution_17.txt
+
+Is solution feasible: True
+Objective function value: 5.0
+Processado: ./datasets/a/instance_0020.txt -> ./outputs/checker_input/pso_partial_solution_20.txt
