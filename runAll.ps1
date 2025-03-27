@@ -10,7 +10,6 @@ For ($i = 1; $i -le 20; $i++) {
     $index = "{0:D4}" -f $i
     $inputFile = "$inputDir\instance_$index.txt"
     $outputFile = "$outputDir\out_$index.txt"
-    Write-Host "Executando para $inputFile..."
     java -jar $jarPath $inputFile $outputFile
 }
 

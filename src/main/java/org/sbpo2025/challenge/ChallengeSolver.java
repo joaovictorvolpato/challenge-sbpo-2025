@@ -2,6 +2,7 @@ package org.sbpo2025.challenge;
 
 import org.apache.commons.lang3.time.StopWatch;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ public class ChallengeSolver {
     }
 
     public ChallengeSolution solve(StopWatch stopWatch) {
+        System.out.println("["+LocalTime.now() + "] - iniciado");
         return new PsoSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve(stopWatch);
         //return new GraspSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve();
         //return new IntegerProgrammingSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve();    

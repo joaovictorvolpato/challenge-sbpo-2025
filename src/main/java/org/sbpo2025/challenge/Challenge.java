@@ -7,6 +7,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,7 +101,7 @@ public class Challenge {
             }
 
             writer.close();
-            System.out.println("Output written to " + outputFilePath);
+            System.out.println("["+LocalTime.now() + "] - Output written to " + outputFilePath);
 
         } catch (IOException e) {
             System.err.println("Error writing output to " + outputFilePath);

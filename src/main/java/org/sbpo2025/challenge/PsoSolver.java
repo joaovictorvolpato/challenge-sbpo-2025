@@ -80,13 +80,16 @@ public class PsoSolver {
             return new ChallengeSolution(bestOrderSelection, bestAislesVisited);
         }
 
-        System.out.println("🔁 Primeira tentativa falhou. Reajustando parâmetros e tentando novamente...");
-        return retryWithRelaxedParameters();
+        var try1 = retryWithRelaxedParameters(10000, 500);
+
+        if(try1 != null){
+            return try1;
+        }
+
+        return retryWithRelaxedParameters(100000, 100000);
     }
 
-    private ChallengeSolution retryWithRelaxedParameters() {
-        int boostedParticles = 400;
-        int boostedIterations = 100;
+    private ChallengeSolution retryWithRelaxedParameters(int boostedParticles, int boostedIterations) {
     
         for (int i = 0; i < boostedParticles; i++) {
             Particle p = initializeParticle();
@@ -106,8 +109,6 @@ public class PsoSolver {
             }
         }
     
-        // Última tentativa forçando 1 pedido
-        System.out.println("⚠️ Tentando fallback mínimo com 1 pedido...");
         for (int idx = 0; idx < orders.size(); idx++) {
             Set<Integer> singleton = Set.of(idx);
             Set<Integer> aislesVisited = assignAisles(singleton);
@@ -115,8 +116,7 @@ public class PsoSolver {
                 return new ChallengeSolution(singleton, aislesVisited);
             }
         }
-    
-        System.err.println("❌ Nenhuma solução viável encontrada mesmo após relaxar.");
+
         return null;
     }
 
