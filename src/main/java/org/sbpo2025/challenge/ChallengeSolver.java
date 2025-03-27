@@ -29,8 +29,8 @@ public class ChallengeSolver {
 
     public ChallengeSolution solve(StopWatch stopWatch) {
         System.out.println("["+LocalTime.now() + "] - iniciado");
-        return new PsoSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve(stopWatch);
-        //return new GraspSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve();
+        //return new PsoSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve(stopWatch);
+        return new GraspSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve(stopWatch);
         //return new IntegerProgrammingSolver(orders, aisles, nItems, waveSizeLB, waveSizeUB).solve();    
     }
     

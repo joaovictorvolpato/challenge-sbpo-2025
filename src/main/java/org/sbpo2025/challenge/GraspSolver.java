@@ -1,7 +1,13 @@
 package org.sbpo2025.challenge;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.time.StopWatch;
 
 public class GraspSolver {
     private final List<Map<Integer, Integer>> orders;
@@ -20,49 +26,107 @@ public class GraspSolver {
         this.waveSizeUB = waveSizeUB;
     }
 
-    public ChallengeSolution solve() {
-        int iterations = 50;
+    public ChallengeSolution solve(StopWatch stopWatch) {
+        int parallelTasks = Runtime.getRuntime().availableProcessors();
+        int iterationsPerTask = 50;
+    
+        ExecutorService executor = Executors.newFixedThreadPool(parallelTasks);
+        List<Future<ChallengeSolution>> futures = new ArrayList<>();
+    
+        System.out.println("Iniciando GRASP paralelo com " + parallelTasks + " threads...");
+    
+        for (int i = 0; i < parallelTasks; i++) {
+            int threadId = i;
+            futures.add(executor.submit(() -> {
+                System.out.println("Thread " + threadId + " começou.");
+                if (stopWatch.getTime(TimeUnit.SECONDS) > 60) {
+                    System.out.println("⏱️ Thread " + threadId + " interrompida por tempo limite.");
+                    return null;
+                }
+                ChallengeSolution s = runGrasp(iterationsPerTask, stopWatch);
+                System.out.println("Thread " + threadId + " terminou.");
+                return s;
+            }));
+        }
+    
+        executor.shutdown();
+    
+        ChallengeSolution bestSolution = null;
+        double bestEfficiency = 0;
+    
+        for (Future<ChallengeSolution> future : futures) {
+            try {
+                ChallengeSolution sol = future.get();
+                if (sol != null) {
+                    double eff = computeObjectiveFunction(sol);
+                    System.out.println("Solução parcial com eficiência: " + eff);
+                    if (eff > bestEfficiency) {
+                        bestEfficiency = eff;
+                        bestSolution = sol;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    
+        if (bestSolution == null) {
+            System.out.println("Nenhuma solução GRASP encontrada.");
+        } else {
+            System.out.println("Melhor solução GRASP: eficiência = " + bestEfficiency);
+        }
+    
+        return bestSolution;
+    }    
+
+    private ChallengeSolution runGrasp(int iterations, StopWatch stopWatch) {
         int maxAislesToVisit = 10;
         int topKAisles = 10;
         ChallengeSolution bestSolution = null;
         double bestEfficiency = 0;
-
+    
         Map<Integer, Integer> aisleTotalStock = new HashMap<>();
         Set<Integer> allAisles = new HashSet<>();
-
+    
         for (int item = 0; item < nItems; item++) {
             for (Map.Entry<Integer, Integer> entry : getAislesWithItem(item).entrySet()) {
                 aisleTotalStock.put(entry.getKey(), aisleTotalStock.getOrDefault(entry.getKey(), 0) + entry.getValue());
                 allAisles.add(entry.getKey());
             }
         }
-
+    
         List<Integer> sortedAisles = aisleTotalStock.entrySet().stream()
                 .sorted((a, b) -> Integer.compare(b.getValue(), a.getValue()))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
-
+    
         for (int it = 0; it < iterations; it++) {
+    
+            if (stopWatch.getTime(TimeUnit.SECONDS) > 60) {
+                System.out.println("runGrasp interrompido por tempo limite.");
+                break;
+            }
+    
             int numAislesToPick = 1 + random.nextInt(maxAislesToVisit);
             int rclSize = Math.min(topKAisles, sortedAisles.size());
             List<Integer> candidateAisles = sortedAisles.subList(0, rclSize);
             Set<Integer> selectedAisles = new HashSet<>(candidateAisles.subList(0, Math.min(numAislesToPick, candidateAisles.size())));
-
+    
             ChallengeSolution candidate = buildBatchFromAisles(selectedAisles);
             if (candidate == null) continue;
-
+    
             ChallengeSolution improved = localSearch(selectedAisles, candidate, allAisles);
             double eff = computeObjectiveFunction(improved);
-
+    
             if (eff > bestEfficiency) {
                 bestEfficiency = eff;
                 bestSolution = improved;
             }
         }
-
-        System.err.println(bestSolution);
+    
         return bestSolution;
-    }
+    }    
+
 
     private ChallengeSolution buildBatchFromAisles(Set<Integer> selectedAisles) {
         Map<Integer, Integer> aisleItemStock = new HashMap<>();
