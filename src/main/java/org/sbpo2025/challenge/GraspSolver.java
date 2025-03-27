@@ -17,6 +17,8 @@ public class GraspSolver {
     private final int waveSizeUB;
     private final Random random = new Random();
 
+    private final int TIME_LIMIT_IN_SECONDS = 10;
+
     public GraspSolver(List<Map<Integer, Integer>> orders, List<Map<Integer, Integer>> aisles,
                        int nItems, int waveSizeLB, int waveSizeUB) {
         this.orders = orders;
@@ -27,8 +29,8 @@ public class GraspSolver {
     }
 
     public ChallengeSolution solve(StopWatch stopWatch) {
-        int parallelTasks = Runtime.getRuntime().availableProcessors();
-        int iterationsPerTask = 50;
+        int parallelTasks = 32;
+        int iterationsPerTask = 500;
     
         ExecutorService executor = Executors.newFixedThreadPool(parallelTasks);
         List<Future<ChallengeSolution>> futures = new ArrayList<>();
@@ -39,8 +41,8 @@ public class GraspSolver {
             int threadId = i;
             futures.add(executor.submit(() -> {
                 System.out.println("Thread " + threadId + " começou.");
-                if (stopWatch.getTime(TimeUnit.SECONDS) > 60) {
-                    System.out.println("⏱️ Thread " + threadId + " interrompida por tempo limite.");
+                if (stopWatch.getTime(TimeUnit.SECONDS) > TIME_LIMIT_IN_SECONDS) {
+                    System.out.println("Thread " + threadId + " interrompida por tempo limite.");
                     return null;
                 }
                 ChallengeSolution s = runGrasp(iterationsPerTask, stopWatch);
@@ -80,8 +82,8 @@ public class GraspSolver {
     }    
 
     private ChallengeSolution runGrasp(int iterations, StopWatch stopWatch) {
-        int maxAislesToVisit = 10;
-        int topKAisles = 10;
+        int maxAislesToVisit = 500;
+        int topKAisles = 100;
         ChallengeSolution bestSolution = null;
         double bestEfficiency = 0;
     
@@ -102,7 +104,7 @@ public class GraspSolver {
     
         for (int it = 0; it < iterations; it++) {
     
-            if (stopWatch.getTime(TimeUnit.SECONDS) > 60) {
+            if (stopWatch.getTime(TimeUnit.SECONDS) > TIME_LIMIT_IN_SECONDS) {
                 System.out.println("runGrasp interrompido por tempo limite.");
                 break;
             }
