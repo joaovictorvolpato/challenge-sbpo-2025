@@ -13,7 +13,7 @@ for i in $(seq -f "%04g" 1 20); do
     outputFile="$outputDir/out_$i.txt"
     echo "Executando para $inputFile..."
     
-    java -jar "$jarPath" "$inputFile" "$outputFile"
+    java -Djava.library.path=/home/joaovolp/cplex/bin/x86-64_linux -jar "$jarPath" "$inputFile" "$outputFile"
 done
 
 echo "✅ Execução finalizada para todas as instâncias."
